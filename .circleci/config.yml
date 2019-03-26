@@ -18,6 +18,17 @@ jobs:
           command: sudo pip install awscli
 
       - run:
+          name: Build Artifact
+          command: |
+            cd webapp
+            pwd
+            ls -al
+            npm install
+            ls -al
+            cd ../
+            pwd
+            ls -al
+      - run:
           name: Zip Artifact
           command: |
             echo "Hello the current build number is ${CIRCLE_BUILD_NUM}"
