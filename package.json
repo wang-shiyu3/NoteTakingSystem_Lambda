@@ -1,0 +1,22 @@
+{
+  "name": "csye6225-spring2019-lambda",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/omnip620/csye6225-spring2019-lambda.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/omnip620/csye6225-spring2019-lambda/issues"
+  },
+  "homepage": "https://github.com/omnip620/csye6225-spring2019-lambda#readme",
+  "dependencies": {
+    "aws-sdk": "^2.428.0"
+  }
+}
