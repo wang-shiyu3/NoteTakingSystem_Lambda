@@ -7,7 +7,6 @@ const DOMAIN_NAME = process.env.DOMAIN_NAME;
 
 exports.handler = async (event, context) => {
   let email = event.Records[0].Sns.Message;
-  email = "omnip620@gmail.com"
   const param = {
     TableName: "csye6225",
     Key: {
