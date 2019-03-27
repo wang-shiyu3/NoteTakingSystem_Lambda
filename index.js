@@ -30,11 +30,9 @@ exports.handler = async (event, context) => {
   console.log(item);
 
   const token = (item.Item && item.Item.token.S) || context.awsRequestId;
-  console.log(
-    "token: " + token + "DOMAIN_NAME: " + DOMAIN_NAME + "email: " + email
-  );
-  const body = `http://${DOMAIN_NAME}/reset?email=${email}&token=${token}`;
 
+  const body = `http://${DOMAIN_NAME}/reset?email=${email}&token=${token}`;
+  console.log(body);
   const emailObj = {
     Destination: {
       ToAddresses: [email]
@@ -53,6 +51,6 @@ exports.handler = async (event, context) => {
     },
     Source: `reset-password@${DOMAIN_NAME}`
   };
-
+  console.log(emailObj);
   ses.sendEmail(emailObj, () => {});
 };
