@@ -52,7 +52,7 @@ jobs:
                   --capabilities CAPABILITY_NAMED_IAM
             aws cloudformation wait stack-create-complete --region ${AWS_REGION} --stack-name csye-lambda
       - run:
-          name:
+          name: Lambda Deploy
           command: |
             aws lambda update-function-code\
                    --region ${AWS_REGION}\
