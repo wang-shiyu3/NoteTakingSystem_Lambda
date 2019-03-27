@@ -22,8 +22,14 @@ jobs:
             pwd
             mkdir -p codedeploy_artifact
             npm install
-            zip -r lambda_function.zip index.js package.json node_modules/
-            mv lambda_function.zip codedeploy_artifact/
+            zip -r lambda_function-${CIRCLE_BUILD_NUM}.zip index.js package.json node_modules/
+            mv lambda_function-${CIRCLE_BUILD_NUM}.zip codedeploy_artifact/
+            cd codedeploy_artifact
+            ls -al
+            pwd
+            cd ..
+            pwd
+            ls -al
       - run:
           name: Upload Artifact to S3
           command: |
@@ -42,7 +48,7 @@ jobs:
                   --region ${AWS_REGION}\
                   --stack-name csye-lambda\
                   --template-body file://csye6225-cf-lambda.yaml\
-                  --parameters ParameterKey=S3bucketName,ParameterValue=${CODE_DEPLOY_S3} ParameterKey=DomainName,ParameterValue=${DomainName}\
+                  --parameters ParameterKey=S3bucketName,ParameterValue=${CODE_DEPLOY_S3} ParameterKey=DomainName,ParameterValue=${DomainName} ParameterKey=ZipFile,ParameterValue=lambda_function-${CIRCLE_BUILD_NUM}.zip\
                   --capabilities CAPABILITY_NAMED_IAM
             aws cloudformation wait stack-create-complete --region ${AWS_REGION} --stack-name csye-lambda
       - run:
@@ -52,4 +58,4 @@ jobs:
                    --region ${AWS_REGION}\
                    --function-name SendEmail\
                    --s3-bucket=${CODE_DEPLOY_S3}\
-                   --s3-key lambda_function.zip\
+                   --s3-key lambda_function-${CIRCLE_BUILD_NUM}.zip\

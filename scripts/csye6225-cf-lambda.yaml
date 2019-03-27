@@ -9,6 +9,9 @@ Parameters:
   DomainName:
     Description: Domain name
     Type: "String"
+  ZipFile:
+    Description: Zip file of Lambda Function
+    Type: "String"
 
 Resources:
   LambdaExecutionRole:
@@ -43,7 +46,7 @@ Resources:
     Properties:
       Code:
         S3Bucket: !Ref S3bucketName
-        S3Key: "lambda_function.zip"
+        S3Key: !Ref ZipFile
       Environment:
         Variables:
           TableName: "csye6225"
