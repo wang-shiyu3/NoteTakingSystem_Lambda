@@ -33,6 +33,8 @@ exports.handler = async (event, context) => {
 
   const body = `http://${DOMAIN_NAME}/reset?email=${email}&token=${token}`;
 
+  console.log(body);
+
   const emailObj = {
     Destination: {
       ToAddresses: [email]
