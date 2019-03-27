@@ -25,12 +25,6 @@ jobs:
             npm install
             zip -r lambda_function.zip index.js package.json node_modules/
             mv lambda_function.zip codedeploy_artifact/
-            cd codedeploy_artifact
-            ls -al
-            pwd
-            cd ..
-            pwd
-            ls -al
       - run:
           name: Upload Artifact to S3
           command: |
