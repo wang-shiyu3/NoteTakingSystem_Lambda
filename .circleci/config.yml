@@ -42,7 +42,7 @@ jobs:
             aws cloudformation create-stack\
                   --region ${AWS_REGION}\
                   --stack-name csye-lambda\
-                  --template-body csye6225-cf-lambda.yaml\
+                  --template-body file://csye6225-cf-lambda.yaml\
                   --parameters ParameterKey=S3bucketName,ParameterValue=${CODE_DEPLOY_S3} ParameterKey=DomainName,ParameterValue=${DomainName}\
                   --capabilities CAPABILITY_NAMED_IAM
       - run:
