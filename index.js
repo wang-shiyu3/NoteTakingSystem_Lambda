@@ -16,7 +16,7 @@ exports.handler = async (event, context) => {
   };
 
   const item = await dynamoDB.getItem(param).promise();
-  if (item == null) {
+  if (item.Item == null) {
     dynamoDB.putItem({
       TableName: "csye6225",
       Item: {
