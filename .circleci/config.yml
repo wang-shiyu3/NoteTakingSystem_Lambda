@@ -39,7 +39,7 @@ jobs:
           command: |
             aws lambda update-function-code\
                    --function-name SendEmail\
-                   --zip-file lambda_function.zip\
+                   --zip-file fileb://lambda_function.zip\
                    --s3-bucket=${CODE_DEPLOY_S3}\
                    --s3-key lambda_function.zip\
       - run:
