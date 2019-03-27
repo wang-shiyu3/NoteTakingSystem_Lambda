@@ -1,6 +1,6 @@
 const AWS = require("aws-sdk");
 AWS.config.update({ region: "us-east-1" });
-const ses = new AWS.SES();
+const ses = new AWS.SES({ apiVersion: "2010-12-01" });
 const dynamoDB = new AWS.DynamoDB();
 
 const DOMAIN_NAME = process.env.DOMAIN_NAME;
@@ -52,14 +52,10 @@ exports.handler = async (event, context) => {
     Source: `reset-password@${DOMAIN_NAME}`
   };
   console.log(emailObj);
-  const sendPromise = new AWS.SES({ apiVersion: "2010-12-01" })
-    .sendEmail(emailObj)
-    .promise();
-  sendPromise
-    .then(function(data) {
-      console.log(data.MessageId);
-    })
-    .catch(function(err) {
-      console.log(err, err.stack);
-    });
+  try {
+    const sendPromise = await ses.sendEmail(emailObj).promise();
+    console.log(sendPromise);
+  } catch (err) {
+    console.log(err, err.stack);
+  }
 };
