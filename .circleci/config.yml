@@ -16,18 +16,6 @@ jobs:
       - run:
           name: Install awscli
           command: sudo pip install awscli
-
-      - run:
-          name: Build Artifact
-          command: |
-            cd webapp
-            pwd
-            ls -al
-            npm install
-            ls -al
-            cd ../
-            pwd
-            ls -al
       - run:
           name: Zip Artifact
           command: |
