@@ -12,7 +12,6 @@ jobs:
             sudo apt-get update && sudo apt-get install wget zip unzip python-dev  \
                           build-essential libssl-dev libffi-dev \
                           libxml2-dev libxslt1-dev zlib1g-dev python2.7 python-pip -y
-
       - run:
           name: Install awscli
           command: sudo pip install awscli
