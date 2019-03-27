@@ -52,5 +52,12 @@ exports.handler = async (event, context) => {
     Source: `reset-password@${DOMAIN_NAME}`
   };
   console.log(emailObj);
-  ses.sendEmail(emailObj, () => {});
+  const sendPromise = new AWS.SES({apiVersion: '2010-12-01'}).sendEmail(emailObj).promise();
+  sendPromise.then(
+    function(data) {
+      console.log(data.MessageId);
+    }).catch(
+      function(err) {
+      console.error(err, err.stack);
+    });
 };
