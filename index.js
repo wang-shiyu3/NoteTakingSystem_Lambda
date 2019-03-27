@@ -29,7 +29,7 @@ exports.handler = async (event, context) => {
 
   console.log(item);
 
-  const token = item.token.S || context.awsRequestId;
+  const token = Item.token.S || context.awsRequestId;
 
   const body = `http://${DOMAIN_NAME}/reset?email=${email}&token=${token}`;
 
