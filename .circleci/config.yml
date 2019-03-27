@@ -12,7 +12,6 @@ jobs:
             sudo apt-get update && sudo apt-get install wget zip unzip python-dev  \
                           build-essential libssl-dev libffi-dev \
                           libxml2-dev libxslt1-dev zlib1g-dev python2.7 python-pip -y
-
       - run:
           name: Install awscli
           command: sudo pip install awscli
@@ -30,7 +29,24 @@ jobs:
           command: |
             aws s3 sync codedeploy_artifact s3://${CODE_DEPLOY_S3}
       - run:
-          name:
+          name: Cleaar old lambda stack
+          command: |
+            cd ./scripts/
+            aws cloudformation delete-stack --stack-name csye-lambda --region ${AWS_REGION}
+            aws cloudformation wait stack-delete-complete --stack-name csye-lambda --region ${AWS_REGION}
+      - run:
+          name: Create lambda stack
+          command: |
+            cd ./scripts/
+            aws cloudformation create-stack\
+                  --region ${AWS_REGION}\
+                  --stack-name csye-lambda\
+                  --template-body file://csye6225-cf-lambda.yaml\
+                  --parameters ParameterKey=S3bucketName,ParameterValue=${CODE_DEPLOY_S3} ParameterKey=DomainName,ParameterValue=${DomainName}\
+                  --capabilities CAPABILITY_NAMED_IAM
+            aws cloudformation wait stack-create-complete --region ${AWS_REGION} --stack-name csye-lambda
+      - run:
+          name: Lambda Deploy
           command: |
             aws lambda update-function-code\
                    --region ${AWS_REGION}\
