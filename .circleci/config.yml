@@ -36,7 +36,13 @@ jobs:
           command: |
             aws s3 sync codedeploy_artifact s3://${CODE_DEPLOY_S3}
       - run:
-          name: Creat lambda stack
+          name: Cleaar old lambda stack
+          command: |
+            cd ./scripts/
+            aws cloudformation delete-stack --stack-name csye-lambda
+            aws cloudformation wait stack-delete-complete --stack-name csye-lambda
+      - run:
+          name: Create lambda stack
           command: |
             cd ./scripts/
             aws cloudformation create-stack\
