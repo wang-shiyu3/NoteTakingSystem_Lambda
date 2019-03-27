@@ -40,7 +40,7 @@ jobs:
           command: |
             cd ./scripts/
             sh csye6225-aws-cf-create-lambda-stack.sh\
-                        --stack csye-lambda\
+                        --stack-name csye-lambda\
                         --S3bucketName=${CODE_DEPLOY_S3}\
                         --DomainName=${DomainName}
       - run:
