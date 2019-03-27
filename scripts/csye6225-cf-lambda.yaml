@@ -1,0 +1,63 @@
+Description: >-
+  Lambda stack.
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  S3bucketName:
+    Description: S3 bucket name
+    Type: "String"
+  DomainName:
+    Description: Domain name
+    Type: "String"
+
+Resources:
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+        - arn:aws:iam::aws:policy/AmazonSESFullAccess
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaDynamoDBExecutionRole
+      Path: "/"
+      RoleName: LambdaExecutionRole
+  LambdaInvokePermission:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      FunctionName: !GetAtt LambdaFunction.Arn
+      Action: "lambda:InvokeFunction"
+      Principal: "sns.amazonaws.com"
+      SourceArn: !Ref SNSService
+  LambdaFunction:
+    Description: Save token to dynamodb and send email by SES
+    Type: "AWS::Lambda::Function"
+    Properties:
+      Code:
+        S3Bucket: !Ref S3bucketName
+        S3Key: "lambda_function.zip"
+      Environment:
+        Variables:
+          TableName: "csye6225"
+          DomainUser: !Ref DomainName
+      Timeout: "20"
+      FunctionName: "SendEmail"
+      Handler: "index.handler"
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Runtime: "nodejs8.10"
+  SNSService:
+    Type: "AWS::SNS::Topic"
+    Properties:
+      DisplayName: "ResetPassword"
+      Subscription:
+        - Endpoint: !GetAtt LambdaFunction.Arn
+          Protocol: "lambda"
+      TopicName: "password_reset"

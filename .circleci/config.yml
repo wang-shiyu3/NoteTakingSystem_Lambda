@@ -36,6 +36,12 @@ jobs:
           command: |
             aws s3 sync codedeploy_artifact s3://${CODE_DEPLOY_S3}
       - run:
+          name: Creat lambda stack
+          command: sh scripts/csye6225-aws-cf-create-lambda-stack.sh\
+                        --stack csye-lambda\
+                        --S3bucketName=${CODE_DEPLOY_S3}\
+                        --DomainName=${DomainName}
+      - run:
           name:
           command: |
             aws lambda update-function-code\
