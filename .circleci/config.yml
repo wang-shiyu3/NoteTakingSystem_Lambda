@@ -1,0 +1,59 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:10.9.0-jessie
+    steps:
+      - checkout
+
+      - run:
+          name: Install packages
+          command: |
+             sudo rm /etc/apt/sources.list
+                    echo "deb http://archive.debian.org/debian/ jessie-backports main" | sudo tee -a /etc/apt/sources.list
+                    echo "deb-src http://archive.debian.org/debian/ jessie-backports main" | sudo tee -a /etc/apt/sources.list
+                    echo "Acquire::Check-Valid-Until false;" | sudo tee -a /etc/apt/apt.conf.d/10-nocheckvalid
+                    echo 'Package: *\nPin: origin "archive.debian.org"\nPin-Priority: 500' | sudo tee -a /etc/apt/preferences.d/10-archive-pin
+                    sudo apt-get update
+              sudo apt-get install wget zip unzip python-dev  \
+              build-essential libssl-dev libffi-dev \
+              libxml2-dev libxslt1-dev zlib1g-dev python2.7 python-pip -y
+
+      - run:
+          name: Install awscli
+          command: sudo pip install awscli
+
+      - run:
+          name: Build Artifact
+          command: |
+            cd webapp
+            pwd
+            ls -al
+            npm install
+            ls -al
+            cd ../
+            pwd
+            ls -al
+      - run:
+          name: Zip Artifact
+          command: |
+            echo "Hello the current build number is ${CIRCLE_BUILD_NUM}"
+            pwd
+            mkdir -p codedeploy_artifact
+            cp index.js codedeploy_artifact/
+            zip -r deploy.zip index.js package.json node_modules/
+            mv lambda_function.zip codedeploy_artifact/
+            cd codedeploy_artifact
+            ls -al
+            pwd
+            cd ..
+            pwd
+            ls -al
+      - run:
+          name: Upload Artifact to S3
+          command: |
+            aws s3 sync codedeploy_artifact s3://${CODE_DEPLOY_S3}
+      - run:
+          name: Make CodeDeploy API call
+          command: |
+            echo "Hello CodeDeploy"
