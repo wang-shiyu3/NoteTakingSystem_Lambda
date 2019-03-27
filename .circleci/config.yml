@@ -22,8 +22,7 @@ jobs:
             echo "Hello the current build number is ${CIRCLE_BUILD_NUM}"
             pwd
             mkdir -p codedeploy_artifact
-            cp index.js codedeploy_artifact/
-            zip -r deploy.zip index.js package.json node_modules/
+            zip -r lambda_function.zip index.js package.json node_modules/
             mv lambda_function.zip codedeploy_artifact/
             cd codedeploy_artifact
             ls -al
