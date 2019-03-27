@@ -38,6 +38,7 @@ jobs:
           name:
           command: |
             aws lambda update-function-code\
+                   --region ${AWS_REGION}\
                    --function-name SendEmail\
                    --zip-file fileb://codedeploy_artifact/lambda_function.zip\
                    --s3-bucket=${CODE_DEPLOY_S3}\
