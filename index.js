@@ -26,7 +26,7 @@ exports.handler = async (event, context) => {
       }
     });
   }
-
+  console.log(email);
   console.log(item);
 
   const token = item.Item && item.Item.token.S || context.awsRequestId;
