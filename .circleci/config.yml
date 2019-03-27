@@ -39,8 +39,8 @@ jobs:
           name: Cleaar old lambda stack
           command: |
             cd ./scripts/
-            aws cloudformation delete-stack --stack-name csye-lambda
-            aws cloudformation wait stack-delete-complete --stack-name csye-lambda
+            aws cloudformation delete-stack --stack-name csye-lambda --region ${AWS_REGION}
+            aws cloudformation wait stack-delete-complete --stack-name csye-lambda --region ${AWS_REGION}
       - run:
           name: Create lambda stack
           command: |
