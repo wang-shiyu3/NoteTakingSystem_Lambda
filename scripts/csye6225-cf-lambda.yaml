@@ -50,7 +50,7 @@ Resources:
       Environment:
         Variables:
           TableName: "csye6225"
-          DomainUser: !Ref DomainName
+          DOMAIN_NAME: !Ref DomainName
       Timeout: "20"
       FunctionName: "SendEmail"
       Handler: "index.handler"
