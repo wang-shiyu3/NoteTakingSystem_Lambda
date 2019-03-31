@@ -2,7 +2,7 @@ const AWS = require("aws-sdk");
 AWS.config.update({ region: "us-east-1" });
 const ses = new AWS.SES({ apiVersion: "2010-12-01" });
 const dynamoDB = new AWS.DynamoDB();
-
+const uuidv1 = require('uuid/v1');
 const DOMAIN_NAME = process.env.DOMAIN_NAME;
 
 exports.handler = async (event, context) => {
@@ -15,12 +15,13 @@ exports.handler = async (event, context) => {
   };
 
   const item = await dynamoDB.getItem(param).promise();
+  let uuid = uuidv1();
   if (!item.Item) {
     dynamoDB.putItem({
       TableName: "csye6225",
       Item: {
         id: { S: email },
-        token: { S: context.awsRequestId },
+        token: { S: uuid },
         ttl: { N: (Math.floor(Date.now() / 1000) + 60).toString() }
       }
     });
@@ -28,7 +29,7 @@ exports.handler = async (event, context) => {
   console.log(email);
   console.log(item);
 
-  const token = (item.Item && item.Item.token.S) || context.awsRequestId;
+  const token = (item.Item && item.Item.token.S) || uuid;
 
   const body = `http://${DOMAIN_NAME}/reset?email=${email}&token=${token}`;
   console.log(body);

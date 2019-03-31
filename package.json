@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/omnip620/csye6225-spring2019-lambda#readme",
   "dependencies": {
-    "aws-sdk": "^2.428.0"
+    "aws-sdk": "^2.428.0",
+    "uuid":"3.3.2"
   }
 }
