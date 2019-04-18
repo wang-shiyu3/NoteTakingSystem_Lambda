@@ -22,7 +22,7 @@ exports.handler = async (event, context) => {
       Item: {
         id: { S: email },
         token: { S: uuid },
-        ttl: { N: (Math.floor(Date.now() / 1000) + 60).toString() }
+        // ttl: { N: (Math.floor(Date.now() / 1000) + 60).toString() }
       }
     });
   }
